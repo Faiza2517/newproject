@@ -99,12 +99,7 @@ export const Eidtpost = () => {
             </div>
 
     )}
-   </div>
-
-
-
-
-            
+   </div>     
         </div>
     )
 }
