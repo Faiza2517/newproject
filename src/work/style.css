@@ -1,0 +1,45 @@
+/* navbar strt here */
+.Navbar-section .navbar .logo{
+    width: 60px;
+ } 
+ .Navbar-section .navbar .nav-item .nav-link:hover{
+   color: rgb(181, 87, 184);
+ }
+ .Navbar-section .navbar .nav-right h3{
+    font-weight: 800;
+    font-size: 20px;
+    margin-right: 30px;
+    margin-top: 7px;
+ }
+ .Navbar-section .navbar .nav-right h3 .fa-solid{
+    color: rgb(87, 184, 87);
+    size: 10;
+ }
+ .Navbar-section .navbar .nav-right button{
+    background-color: rgb(87, 184, 87);
+    color: white;
+    border-radius: 40px;
+    border: none;
+ }
+ .Navbar-section{
+    margin-bottom: 70px;
+ }
+
+/* navbar end here */
+
+/* Banner strt here */
+
+.banner .banner-img{
+    margin-bottom: 40px;
+}
+
+.banner-heading h1{
+    font-weight: 800;
+}
+.banner-heading h4{
+   opacity: 0.5;
+}
+ .banner-heading h1 span{
+    color: rgb(87, 184, 87);
+ }
+ 
