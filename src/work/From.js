@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { Link } from '@mui/material'
 
 export const From = () => {
      const [formdata,setPost]=useState({title:'',body:''})
@@ -50,6 +51,7 @@ export const From = () => {
 
   return (
     <div className='container card' style={{marginTop:15}}>
+    
         <form onSubmit={handleSubmit}>
             Title:<input type='text' onChange={handleInput} name='title' className='form-control'></input><br></br>
             Post: <textarea  onChange={handleInput} name='body'  className='form-control'/><br></br>

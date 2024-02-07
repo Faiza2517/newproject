@@ -31,7 +31,7 @@ export const Header = () => {
               </li>
 
             </ul>
-            <div style={{marginLeft:850}}>
+            <div style={{marginLeft:750}}>
            <strong>blog<i class="fa-solid fa-message"></i></strong>
             <button style={{ backgroundColor: 'green', borderRadius: '13px', color: 'white', marginLeft: 20 }}>Planner<i class="fa-solid fa-circle-arrow-down" style={{marginLeft:6}} aria-hidden="true"></i></button>
           </div> 
