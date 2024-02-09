@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 export const MyDetail = () => {
-
+ const [loading,setloading]=useState(true)
   const [show,setShow]=useState([])
   let {id}=useParams();
    // const {state} =useLocation()
@@ -20,6 +20,7 @@ export const MyDetail = () => {
     axios.get(`https://jsonplaceholder.typicode.com/posts/${id}`)
         .then((response) => {
             setShow(response.data)
+            setloading(false)
         })
         .catch((error) => {
             console.error('error fatching data', error)
@@ -37,7 +38,7 @@ export const MyDetail = () => {
                    </div>
          </div> */} 
          <div className='container'>
-          <div style={{marginBottom:10}}>
+          <div style={{marginBottom:20}}>
             <button className='btn btn-success' onClick={handleBack}>
             <i class="fa-solid fa-arrow-left"></i>
             </button>
@@ -51,6 +52,14 @@ export const MyDetail = () => {
                 <p>{show.userid}</p>
                    </div>
          </div>
+         {loading && (
+                    <div className="d-flex justify-content-center">
+                        <div className="spinner-border text-success" role="status">
+                            <span className="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                )}
+
          </div>    
       </div>
     );

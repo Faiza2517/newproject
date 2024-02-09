@@ -10,15 +10,15 @@ export const Header = () => {
 <section className='Navbar-section'>
 <nav className="navbar navbar-expand-lg navbar-light ">
         <div className="container-fluid">
-          <a><img className='logo' src={img}  /></a>
+          <a href='/'><img className='logo' src={img}  /></a>
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
               <li className="nav-item">
-                <li className="nav-link active me-3" aria-current="page" href="/">Work
-                <i class="fa fa-shopping-bag" aria-hidden="true"/></li>
+                <a className="nav-link" href='/'>Work
+                <i class="fa fa-shopping-bag" aria-hidden="true"/></a>
 
               </li>
               <li className="nav-item">
@@ -31,9 +31,9 @@ export const Header = () => {
               </li>
 
             </ul>
-            <div style={{marginLeft:750}}>
+            <div class='d-flex ' style={{marginLeft:850}}>
            <strong>blog<i class="fa-solid fa-message"></i></strong>
-            <button style={{ backgroundColor: 'green', borderRadius: '13px', color: 'white', marginLeft: 20 }}>Planner<i class="fa-solid fa-circle-arrow-down" style={{marginLeft:6}} aria-hidden="true"></i></button>
+            <button style={{ backgroundColor: 'green', borderRadius: '13px', color: 'white', marginLeft: 20 }}>Planner<i class="fa-solid fa-leaf" style={{marginLeft:6}} aria-hidden="true"></i></button>
           </div> 
                     </div>
                 </div>

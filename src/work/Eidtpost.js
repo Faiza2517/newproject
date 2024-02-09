@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 
 export const Eidtpost = () => {
     const [loading, setloading] = useState(true)
-    const [datasave, setSavedata] = useState(null)
     const [inputedit, setinputedit] = useState(false)
     const [eidtpost, seteditpost] = useState({ title: '', body: '', userId: '', id: '' });
 
@@ -16,15 +15,10 @@ export const Eidtpost = () => {
         //get data API 
         axios.get(`https://jsonplaceholder.typicode.com/posts/${id}`)
             .then((response) => {
-                setSavedata(response.data);
+                const postData=response.data;
+                seteditpost(postData)
                 setloading(false)
-                seteditpost({
-                    title: response.data.title,
-                    body: response.data.body,
-                    userId: response.data.userId,
-                    id: response.data.id,
-
-                })
+                
             })
             .catch((error) => {
                 console.error('finding error', error)
@@ -54,8 +48,17 @@ export const Eidtpost = () => {
     }
     // save edit data
     const handleSave = () => {
-        setSavedata(eidtpost);
-        setinputedit(false);
+        axios.put(`https://jsonplaceholder.typicode.com/posts/${id}`, eidtpost)
+        .then((response) => {
+          console.log('Post updated successfully:', response.data);
+          // Update the post in the local state
+          setinputedit(false); // Exit edit mode
+          // You don't need to do anything with useParams(id) here, 
+          // as you're already updating the post with the correct id.
+        })
+        .catch((error) => {
+          console.error('Error updating post:', error);
+        });
     }
     if (loading) {
         return (
@@ -112,7 +115,14 @@ export const Eidtpost = () => {
                                     name='id'
                                     id='editedid'
                                     value={eidtpost.id}
-                                    onChange={handleConvertInput}></input>
+                                    onChange={handleConvertInput}
+                                    onKeyPress={(e) => {
+                                        // Allow only numeric input
+                                        const charCode = e.charCode;
+                                        if (charCode !== 8 && charCode !== 0 && (charCode < 48 || charCode > 57)) {
+                                          e.preventDefault();
+                                        }
+                                      }}></input>
                             </div>
                             <button className='btn btn-danger' onClick={handleSave}>save</button>
                         </>
@@ -120,13 +130,15 @@ export const Eidtpost = () => {
                     )
 
                         //else condition editpost data
+                        // {/* Display fetched data */}
                         : (
                             <div>
-                                <strong>{datasave?.title}</strong>
-                                <p>{datasave?.body}</p>
-                                <p>{datasave?.userId}</p>
-                                <p>{datasave?.id}</p>
-                                <button className='btn btn-info' onClick={handleEditPost}>Editpost</button>
+                                <h2>Title</h2>
+                                <p>{eidtpost.title}</p>
+                                <p><h3>Body</h3>{eidtpost.body}</p>
+                                <p><h3>Userid</h3>{eidtpost.userId}</p>
+                                <p><h3>Id</h3>{eidtpost.id}</p>
+                                <button className='btn btn-info' onClick={() => handleEditPost(true)}>Editpost</button>
                             </div>
 
                         )}
@@ -135,3 +147,4 @@ export const Eidtpost = () => {
         </div>
     )
 }
+

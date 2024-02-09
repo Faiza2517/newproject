@@ -1,64 +1,83 @@
 import React from 'react'
-import { useState} from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-export const Confirmation = ({data, Data, setData}) => {
+export const Confirmation = ({ data, Data, setData }) => {
+    const [loading, setloading] = useState(false)
     const [del, setDel] = useState(false)
-  //handledelete
-  const handledelete = (index) => {
-    axios.delete(`https://jsonplaceholder.typicode.com/posts/${index}`)
-        .then((response) => {
-            console.log("check data", response)
-        })
+    //handledelete
+    const handledelete = (index) => {
+        setloading(true);
+        axios.delete(`https://jsonplaceholder.typicode.com/posts/${index}`)
+            .then((response) => {
+                console.log("check data", response)
+                setloading(false)
+            })
         console.log(index, "check index");
 
-    const update = Data.filter(Data => Data.id !== index)
-    setData(update)
-    console.log(update);
-    //confirmation msg
-    setDel(false)
-}
-//handle cancle
+        const update = Data.filter(Data => Data.id !== index)
+        setData(update)
+        console.log(update);
+        //confirmation msg
+        setDel(false)
+    }
+    //handle cancle
 
-const handleCancle=()=>{
-setDel(false)
-}
+    const handleCancle = () => {
+        setDel(false)
+    }
 
-//read more usenavigate
-// const navigate = useNavigate()
-// const handleClick = ((Data) => {
-//     if (Data) {
-//         navigate(`/Detail/${Data.id}`, { state: Data })
-//     }
-// })
-//readmore end
+    //read more usenavigate
+    // const navigate = useNavigate()
+    // const handleClick = ((Data) => {
+    //     if (Data) {
+    //         navigate(`/Detail/${Data.id}`, { state: Data })
+    //     }
+    // })
+    //readmore end
 
-return (
+    return (
 
-    <>
-       
-            <div className='container card' style={{ paddingLeft: 180, paddingRight: 180, padding: 20 }}>
-                <strong>{data.id}</strong>
-                <p>{data.title}</p>
+        <>
+            <div key={data.id} className="container card p-3">
+                <h3>{data.title}</h3>
+                <strong>{data.head}</strong>
                 <p>{data.body}</p>
-                <div style={{ width: 100 }}>
-                    { /* usenavigate <button onClick={() => handleClick(data)} >Read More</button> */}
-                    <p><Link to={`/ReadMore/${data.id}`}>Read more</Link></p>
-                    <p><Link to={`/editpost/${data.id}`}>Editpost</Link></p>
-                    <button className='btn btn-primary' onClick={() => setDel(true)}  >Delete</button>
-                    
+                <p>{data.id}</p>
+                <p>{data.userId}</p>
+                <p><Link to={`/ReadMore/${data.id}`}>Read more</Link></p>
+
+                <div style={{ width: 200, marginRight: 20 }}>
+                    <p><Link to={`/editpost/${data.id}`} type="btn"> Edit post</Link></p>
+                    <button className="btn-success" onClick={() => setDel(true)}>Delete Post</button>
+
                 </div>
                 {del && (
-                    <div >
-                    <p>are you sure delete this post</p>
-                    <button className='btn btn-primary' onClick={()=>handledelete(data.id)} style={{margin:8}}>Yes</button>
-                    <button className='btn btn-primary' onClick={handleCancle}>No</button>
+                    <div>
+                        <p>Are you sure you want to delete this blog post?</p>
+                        <button className="btn-success" onClick={() => handledelete(data.id)}>Yes</button>
+                        <button className="btn-success" onClick={handleCancle}>No</button>
+
                     </div>
                 )}
+                {loading && (
+                    <div className="d-flex justify-content-center">
+                        <div className="spinner-border text-success" role="status">
+                            <span className="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                )}
+
+
+
             </div>
 
+
+
         </>
-)
+    )
 
 }
+
+
