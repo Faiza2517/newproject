@@ -1,10 +1,8 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { Confirmation } from './Confirmation'
-import { Link } from 'react-router-dom'
 
 export const Card = () => {
     const [loading, setloading] = useState(true)
+    const [Start,setStart]=useState()
+    const [Limit,setLimit]=useState()
     const [Data, setData] = useState([])
 
 
@@ -34,12 +32,7 @@ export const Card = () => {
         <>
             <p className='container fluid'>  <Link to={`/form/id`}>Add post</Link></p>
 
-            < div style={{ marginTop: 15 }}>
-                {Data.map((data) => {
-                    return (
-                        <Confirmation data={data} Data={Data} setData={setData} />
-                    )
-                })}</div>
+            
         </>
     )
 }

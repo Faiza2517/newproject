@@ -47,43 +47,62 @@ export const Eidtpost = () => {
         }))
     }
     // save edit data
-    const handleSave = () => {
-        axios.put(`https://jsonplaceholder.typicode.com/posts/${id}`, eidtpost)
-        .then((response) => {
-          console.log('Post updated successfully:', response.data);
-          // Update the post in the local state
-          setinputedit(false); // Exit edit mode
-          // You don't need to do anything with useParams(id) here, 
+    const handleSave = (e) => {
+        e.preventDefault();
+        // Validation
+        if (eidtpost.title.trim().length === 0 || eidtpost.title.trim().length <= 3) {
+            seterror('Title should be more than three characters');
+            return;
+        }
+        else if (eidtpost.body.trim().length === 0 || eidtpost.body.trim().length <=3) {
+            seterror('Body should contain maximum three charcter');
+            return;
+        }
+        else if (eidtpost.body.trim().length === 0 || eidtpost.body.trim().length >= 500) {
+            seterror('Body should contain maximum 500 characters');
+            return;
+        }
+       
+        else if (eidtpost.userId.length === 0) {
+            seterror('userid should contain be empty');
+            return;
+        }
+        else if (eidtpost.userId < 0) {
+            seterror(' userid should contain only numeric value');
+            return;
+        }
+        else if (eidtpost.id.length === 0) {
+            seterror('id should contain be empty');
+            return;
+        }
+        else if (eidtpost.id < 0) {
+            seterror('id should contain only numeric value');
+            return;
+        }
+        else {
+            seterror('submit success');
+        }
+        //validation end
+
+        axios.put(`https://jsonplaceholder.typicode.com/posts/${id}`,eidtpost)
+            .then((response) => {
+                console.log('Post updated successfully:', response.data);
+                // Update the post in the local state
+                // You don't need to do anything with useParams(id) here, 
           // as you're already updating the post with the correct id.
         })
         .catch((error) => {
           console.error('Error updating post:', error);
         });
     }
-    if (loading) {
-        return (
-            <div class='d-flex justify-content-center'>
-                <div class="spinner-border text-success" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
-        )
-
-    }
 
     return (
         <div className='container'>
             <div style={{marginBottom:10}}>
             <button className='btn btn-success' onClick={handleBack}>
-            <i class="fa-solid fa-arrow-left"></i>
             </button>
             </div>
             <div className='container card'>
-
-                <div>
-                    {inputedit ? (
-                        //if condition save data
-                        <>
                             <div>
                                 <label className='form-label'>Title</label>
                                 <input type='text'
@@ -129,16 +148,6 @@ export const Eidtpost = () => {
 
                     )
 
-                        //else condition editpost data
-                        // {/* Display fetched data */}
-                        : (
-                            <div>
-                                <h2>Title</h2>
-                                <p>{eidtpost.title}</p>
-                                <p><h3>Body</h3>{eidtpost.body}</p>
-                                <p><h3>Userid</h3>{eidtpost.userId}</p>
-                                <p><h3>Id</h3>{eidtpost.id}</p>
-                                <button className='btn btn-info' onClick={() => handleEditPost(true)}>Editpost</button>
                             </div>
 
                         )}

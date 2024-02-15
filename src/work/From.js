@@ -42,7 +42,6 @@ export const From = () => {
             seterrorr('boday cannot b empty')
             setloading(false)
             return;
-
         }
         else if (!/^\d+$/.test(formdata.userId)) {
             seterrorr('userId cannot empty and should contain only numeric value');
@@ -94,7 +93,6 @@ export const From = () => {
                         name='body'
                         className='form-control' /><br></br>
                     userId:<input
-                        required
                         type='number'
                         onChange={handleInput}
                         name='userId'
