@@ -4,13 +4,20 @@ import { Link } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
 export const From = () => {
-    const [loading, setloading] = useState()
+    const [loading, setLoading] = useState()
     const [formdata, setPost] = useState({ title: '', body: '', userId: '' })
-    const [errorr, seterrorr] = useState('')
-    const [submitdata, setsubmitdata] = useState(null)
+    const [errorr, setErrorr] = useState('')
+    const [submitdata, setSubmitdata] = useState(null)
+    const [count,setCount]=useState(0)
+
 
 
     const handleInput = (e) => {
+
+        const { name, value } = e.target;
+        if (name === 'body') {
+            setCount(value.length)
+        }
         setPost({ ...formdata, [e.target.name]: e.target.value })
 
 
@@ -18,48 +25,54 @@ export const From = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Start loading
-        setloading(true);
+        setLoading(true);
 
         // validation start
         if (formdata.title.length === 0) {
-            seterrorr('title cannot be empty');
-            setloading(false); // Stop loading
+            setErrorr('title cannot be empty');
+            setLoading(false); // Stop loading
             return;
         } else if (formdata.title.length <= 5) {
-            seterrorr('title should have more than five characters');
-            setloading(false); // Stop loading
+            setErrorr('title should have more than five characters');
+            setLoading(false); // Stop loading
             return;
         } else if (formdata.body.length === 0) {
-            seterrorr('body cannot be empty');
-            setloading(false); // Stop loading
+            setErrorr('body cannot be empty');
+            setLoading(false); // Stop loading
             return;
-        } else if (formdata.body.length >= 500) {
-            seterrorr('maximum length should be 500 characters');
-            setloading(false); // Stop loading
+        }
+        else if (formdata.body.length <=3) {
+            setErrorr('body chould contain maximum three charcter');
+            setLoading(false); // Stop loading
+            return;
+        }
+         else if (formdata.body.length >= 500) {
+            setErrorr('maximum length should be 500 characters');
+            setLoading(false); // Stop loading
             return;
         }
         else if (formdata.userId.length === 0) {
-            seterrorr('boday cannot b empty')
-            setloading(false)
+            setErrorr('userid should can be empty')
+            setLoading(false)
             return;
         }
-        else if (!/^\d+$/.test(formdata.userId)) {
-            seterrorr('userId cannot empty and should contain only numeric value');
-            setloading(false); // Stop loading
+        else if (formdata.userId <0) {
+            setErrorr('userId cannot empty and should contain only numeric value');
+            setLoading(false); // Stop loading
             return;
         }
 
         axios.post('https://jsonplaceholder.typicode.com/posts', { ...formdata })
             .then((response) => {
-                setsubmitdata(response.data);//set submit data
-                seterrorr('submit success');
+                setSubmitdata(response.data);//set submit data
+                setErrorr('submit success');
                 console.log(response);
             })
             .catch((error) => {
                 console.log(error);
             })
             .finally(() => {
-                setloading(false); // Set loading to false after the request is completed
+                setLoading(false); // Set loading to false after the request is completed
                 e.target.reset();
             });
     }
@@ -85,25 +98,20 @@ export const From = () => {
                     Title:<input type='text'
                         onChange={handleInput}
                         name='title'
-                        required
+
                         className='form-control'></input><br></br>
                     Post: <textarea
-                        required
                         onChange={handleInput}
                         name='body'
-                        className='form-control' /><br></br>
+                        className='form-control' />
+                        <p>Count Word:{count}/500</p>
+                        <br></br>
                     userId:<input
                         type='number'
                         onChange={handleInput}
                         name='userId'
                         className='form-control'
-                        onKeyPress={(e) => {
-                            // Allow only numeric input
-                            const charCode = e.charCode;
-                            if (charCode !== 8 && charCode !== 0 && (charCode < 48 || charCode > 57)) {
-                                e.preventDefault();
-                            }
-                        }}
+                        onKeyDown={(e)=> e.key === 'e' && e.preventDefault()}// prevent 'e'
                     ></input><br></br>
                     <button className='btn btn-primary'>Submit</button>
                     <strong>{errorr}</strong>

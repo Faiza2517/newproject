@@ -5,9 +5,11 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 export const Eidtpost = () => {
-    const [loading, setloading] = useState(true)
-    const [inputedit, setinputedit] = useState(false)
-    const [eidtpost, seteditpost] = useState({ title: '', body: '', userId: '', id: '' });
+
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState()
+    const [eidtpost, setEditpost] = useState({ title: '', body: '', userId: '', id: '' });
+
 
     const { id } = useParams();
 
@@ -15,10 +17,10 @@ export const Eidtpost = () => {
         //get data API 
         axios.get(`https://jsonplaceholder.typicode.com/posts/${id}`)
             .then((response) => {
-                const postData=response.data;
-                seteditpost(postData)
-                setloading(false)
-                
+                const postData = response.data;
+                setEditpost(postData)
+                setLoading(false)
+
             })
             .catch((error) => {
                 console.error('finding error', error)
@@ -34,14 +36,11 @@ export const Eidtpost = () => {
     useEffect(() => {
         editdata(id)
     }, [])
-    //edit post
-    const handleEditPost = () => {
-        setinputedit(!inputedit)
-    }
+
     //input convert edit
     const handleConvertInput = (e) => {
         const { name, value } = e.target;
-        seteditpost((prevoiusdata) => ({
+        setEditpost((prevoiusdata) => ({
             ...prevoiusdata,
             [name]: value,
         }))
@@ -49,110 +48,130 @@ export const Eidtpost = () => {
     // save edit data
     const handleSave = (e) => {
         e.preventDefault();
+        setLoading(true);
         // Validation
         if (eidtpost.title.trim().length === 0 || eidtpost.title.trim().length <= 3) {
-            seterror('Title should be more than three characters');
+            setError('Title should be more than three characters');
+            setLoading(false);
             return;
         }
         else if (eidtpost.body.trim().length === 0 || eidtpost.body.trim().length <=3) {
-            seterror('Body should contain maximum three charcter');
+            setError('Body should contain maximum three charcter');
+            setLoading(false);
             return;
         }
         else if (eidtpost.body.trim().length === 0 || eidtpost.body.trim().length >= 500) {
-            seterror('Body should contain maximum 500 characters');
+            setError('Body should contain maximum 500 characters');
+            setLoading(false);
             return;
         }
        
         else if (eidtpost.userId.length === 0) {
-            seterror('userid should contain be empty');
+            setError('userid should contain be empty');
+            setLoading(false);
             return;
         }
         else if (eidtpost.userId < 0) {
-            seterror(' userid should contain only numeric value');
+            setError(' userid should contain only numeric value');
+            setLoading(false);
             return;
         }
         else if (eidtpost.id.length === 0) {
-            seterror('id should contain be empty');
+            setError('id should contain be empty');
+            setLoading(false);
             return;
         }
         else if (eidtpost.id < 0) {
-            seterror('id should contain only numeric value');
+            setError('id should contain only numeric value');
+            setLoading(false);
             return;
         }
         else {
-            seterror('submit success');
+            setError('submit success');
         }
         //validation end
 
         axios.put(`https://jsonplaceholder.typicode.com/posts/${id}`,eidtpost)
             .then((response) => {
                 console.log('Post updated successfully:', response.data);
+                setLoading(false);
                 // Update the post in the local state
                 // You don't need to do anything with useParams(id) here, 
-          // as you're already updating the post with the correct id.
-        })
-        .catch((error) => {
-          console.error('Error updating post:', error);
-        });
+                Navigate('/');
+                
+            })
+            .catch((error) => {
+                console.error('Error updating post:', error);
+                setLoading(false);
+            });
     }
 
     return (
         <div className='container'>
-            <div style={{marginBottom:10}}>
-            <button className='btn btn-success' onClick={handleBack}>
-            </button>
+            <div style={{ marginBottom: 10 }}>
+                <button className='btn btn-success' onClick={handleBack}>
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
             </div>
             <div className='container card'>
-                            <div>
-                                <label className='form-label'>Title</label>
-                                <input type='text'
-                                    className='form-control'
-                                    name='title'
-                                    id='editedtitle'
-                                    value={eidtpost.title}
-                                    onChange={handleConvertInput}></input>
-                            </div>
-                            <div>
-                                Body <input type='text'
-                                    className='form-control'
-                                    name='body'
-                                    id='editedbody'
-                                    value={eidtpost.body}
-                                    onChange={handleConvertInput}></input>
-                            </div>
-                            <div>
-                                Userid<input type='text'
-                                    className='form-control'
-                                    name='userId'
-                                    id='editeduserId'
-                                    value={eidtpost.userId}
-                                    onChange={handleConvertInput}></input>
-                            </div>
-                            <div>
-                                Id<input type='text'
-                                    className='form-control'
-                                    name='id'
-                                    id='editedid'
-                                    value={eidtpost.id}
-                                    onChange={handleConvertInput}
-                                    onKeyPress={(e) => {
-                                        // Allow only numeric input
-                                        const charCode = e.charCode;
-                                        if (charCode !== 8 && charCode !== 0 && (charCode < 48 || charCode > 57)) {
-                                          e.preventDefault();
-                                        }
-                                      }}></input>
-                            </div>
-                            <button className='btn btn-danger' onClick={handleSave}>save</button>
-                        </>
-
-                    )
-
-                            </div>
-
-                        )}
+            {loading && (
+                <div className="d-flex justify-content-center">
+                    <div className="spinner-border text-success" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </div>
                 </div>
+            )}
+                <div>
+                    <label className='form-label'>Title</label>
+                    <input type='text'
+                        className='form-control'
+                        name='title'
+                        id='editedtitle'
+                        value={eidtpost.title}
+                        onChange={handleConvertInput}
+                        ></input>
+                </div>
+                <div>
+                    Body <input type='text'
+                        className='form-control'
+                        name='body'
+                        id='editedbody'
+                        value={eidtpost.body}
+                        onChange={handleConvertInput}></input>
+                </div>
+                <div>
+                    Userid<input type='text'
+                        className='form-control'
+                        name='userId'
+                        id='editeduserId'
+                        value={eidtpost.userId}
+                        onChange={handleConvertInput}
+                        onKeyDown={(e)=> e.key === 'e' && e.preventDefault()}// prevent 'e'
+                        ></input>
+                </div>
+                <div>
+                    Id<input type='text'
+                        className='form-control'
+                        name='id'
+                        id='editedid'
+                        value={eidtpost.id}
+                        onChange={handleConvertInput}
+                        onKeyDown={(e)=> e.key === 'e' && e.preventDefault()} // prevent 'e'
+                        ></input>
+                </div>
+                <div style={{marginTop:10}}>
+                <button className='btn btn-danger'  onClick={handleSave}>save</button>
+                </div>
+                <p>{error}</p>
+                 {/* {Load && (
+                <div className="d-flex justify-content-center">
+                    <div className="spinner-border text-success" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                </div> 
+            )}  */}
             </div>
+            
         </div>
     )
 }

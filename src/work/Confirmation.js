@@ -4,15 +4,15 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 export const Confirmation = ({ data, Data, setData }) => {
-    const [loading, setloading] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [del, setDel] = useState(false)
     //handledelete
     const handledelete = (index) => {
-        setloading(true);
+        setLoading(true);
         axios.delete(`https://jsonplaceholder.typicode.com/posts/${index}`)
             .then((response) => {
                 console.log("check data", response)
-                setloading(false)
+                setLoading(false)
             })
         console.log(index, "check index");
 

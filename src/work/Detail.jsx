@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 export const MyDetail = () => {
- const [loading,setloading]=useState(true)
+ const [loading,setLoading]=useState(true)
   const [show,setShow]=useState([])
   let {id}=useParams();
    // const {state} =useLocation()
@@ -20,7 +20,7 @@ export const MyDetail = () => {
     axios.get(`https://jsonplaceholder.typicode.com/posts/${id}`)
         .then((response) => {
             setShow(response.data)
-            setloading(false)
+            setLoading(false)
         })
         .catch((error) => {
             console.error('error fatching data', error)
