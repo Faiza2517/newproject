@@ -61,8 +61,10 @@ export const Card = () => {
                 </select>
 </div>
             <div style={{ marginTop: 15 }}>
-                {data.map((post) => (
-                    <Confirmation key={post.id} data={post} />
+                {data.map((index) => (
+                 
+                    <Confirmation index={index} data={data}  setData={setData}/>
+                    
                 ))}
             </div>
 

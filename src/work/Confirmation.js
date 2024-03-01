@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-export const Confirmation = ({ data, Data, setData }) => {
+export const Confirmation = ({index,  data,  setData }) => {
     const [loading, setLoading] = useState(false)
     const [del, setDel] = useState(false)
     //handledelete
@@ -16,7 +16,7 @@ export const Confirmation = ({ data, Data, setData }) => {
             })
         console.log(index, "check index");
 
-        const update = Data.filter(Data => Data.id !== index)
+        const update = data.filter(data => data.id !== index)
         setData(update)
         console.log(update);
         //confirmation msg
@@ -40,23 +40,23 @@ export const Confirmation = ({ data, Data, setData }) => {
     return (
 
         <>
-            <div key={data.id} className="container card p-3">
-                <h3>{data.title}</h3>
-                <strong>{data.head}</strong>
-                <p>{data.body}</p>
-                <p>{data.id}</p>
-                <p>{data.userId}</p>
-                <p><Link to={`/ReadMore/${data.id}`}>Read more</Link></p>
+            <div key={index.id} className="container card p-3">
+                <h3>{index.title}</h3>
+                <strong>{index.head}</strong>
+                <p>{index.body}</p>
+                <p>{index.id}</p>
+                <p>{index.userId}</p>
+                <p><Link to={`/ReadMore/${index.id}`}>Read more</Link></p>
 
                 <div style={{ width: 200, marginRight: 20 }}>
-                    <p><Link to={`/editpost/${data.id}`} type="btn"> Edit post</Link></p>
+                    <p><Link to={`/editpost/${index.id}`} type="btn"> Edit post</Link></p>
                     <button className="btn-success" onClick={() => setDel(true)}>Delete Post</button>
 
                 </div>
                 {del && (
                     <div>
                         <p>Are you sure you want to delete this blog post?</p>
-                        <button className="btn-success" onClick={() => handledelete(data.id)}>Yes</button>
+                        <button className="btn-success" onClick={() => handledelete(index.id)}>Yes</button>
                         <button className="btn-success" onClick={handleCancle}>No</button>
 
                     </div>
